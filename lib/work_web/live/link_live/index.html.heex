@@ -1,0 +1,50 @@
+<div class="flex gap-2">
+  <h1 class="grow text-2xl font-bold">Links</h1>
+
+  <.link
+    navigate={~p"/links/new"}
+    class="bg-black border border-black hover:bg-gray-700 text-white font-bold py-2 px-3 rounded-md"
+  >
+    Add Link
+  </.link>
+</div>
+<form phx-change="search" class="mt-4 mb-4">
+  <input
+    type="text"
+    name="query"
+    value={@query}
+    placeholder="Поиск по ссылкам"
+    phx-debounce="300"
+    class="border border-gray-300 rounded-md px-3 py-2 w-full"
+  />
+</form>
+<div :for={link <- @links}>
+  {link.url}
+  <button
+    phx-click="delete"
+    phx-value-id={link.id}
+    data-confirm="Ты уверен, что хочешь удалить?"
+    class="bg-red-600 text-white px-3 py-2 rounded-md"
+  >
+    Удалить
+  </button>
+
+  <.link
+    navigate={~p"/links/edit/#{link.id}"}
+    class="bg-black border border-black hover:bg-gray-700 text-white font-bold py-2 px-3 rounded-md"
+  >
+    edit {link.id}
+  </.link>
+
+  <button
+    phx-click="status"
+    phx-value-id={link.id}
+    class={"text-white px-3 py-2 rounded-md font-semibold transition-colors #{if link.is_active, do: "bg-green-600 hover:bg-green-700", else: "bg-red-600 hover:bg-red-700"}"}
+  >
+    <%= if link.is_active do %>
+      Включено
+    <% else %>
+      Выключено
+    <% end %>
+  </button>
+</div>
